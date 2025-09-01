@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.variable} ${lato.variable}`}
+        className={`${montserrat.variable} ${lato.variable} h-screen bg-[#EAEFF4] mx-[80px]`}
       >
         {children}
       </body>
