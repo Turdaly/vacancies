@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { ArrowRight } from "lucide-react";
 import {
   Card,
@@ -10,34 +10,50 @@ import {
 
 import { Button } from "@/shared/ui/button";
 import { useRouter } from "next/navigation";
+import { getVacancies, Vacancy } from "@/shared/api/vacancy-api";
+import { useEffect, useState } from "react";
+import { formatNumber } from "@/shared/lib/format-number";
+
 export default function VacanciesPage() {
-  const cards = [1, 2, 3, 4, 5, 6];
-  const router = useRouter()
-  const onClick = (id:string) => {
-    router.push(`vacancies/${id}`)
-  }
+  const router = useRouter();
+  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
+  useEffect(() => {
+    async function fetchVacancies() {
+      const data = await getVacancies();
+      console.log(data)
+      if (data) setVacancies(data);
+    }
+    fetchVacancies();
+  }, []);
+
+  const onClick = (id: number) => {
+    router.push(`vacancies/${id}`);
+  };
   return (
-    <div className="flex flex-col items-center justify-center h-screen gap-14">
+    <div className="flex flex-col items-center justify-center gap-14">
       <h1 className={`font-montserrat text-5xl font-medium`}>Наши вакансии</h1>
 
       <div className="grid grid-cols-3 justify-center gap-7">
-        {cards.map((card, i) => (
-          <Card className="max-w-sm px-1 py-7 w-[566px]" key={i}>
+        {vacancies.map((vacancy) => (
+          <Card className="max-w-sm px-1 py-7 w-[566px]" key={vacancy.id}>
             <CardHeader>
-              <CardDescription className="font-lato font-normal text-2xl">Алматы</CardDescription>
+              <CardDescription className="font-lato font-normal text-2xl">
+                {vacancy.location}
+              </CardDescription>
               <CardTitle className="font-lato font-normal text-2xl ml-1">
-                Frontend-разработчик
+                {vacancy.jobTitle}
               </CardTitle>
               <CardDescription className="font-lato font-normal text-2xl">
-                от 1 100 000 тг
+                от {formatNumber(vacancy.salary)}
               </CardDescription>
             </CardHeader>
             <CardFooter>
               <Button
-                className="rounded-full bg-primary hover:bg-indigo-500 cursor-pointer px-5 py-4 text-xl"
+                onClick={() => onClick(vacancy.id)}
                 size={null}
+                className="rounded-full bg-primary hover:bg-indigo-500 cursor-pointer px-5 py-4 text-xl"
               >
-                Подробнее <ArrowRight className="translate-0.5"/>
+                Подробнее <ArrowRight className="translate-0.5" />
               </Button>
             </CardFooter>
           </Card>

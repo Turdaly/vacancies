@@ -14,7 +14,7 @@ import {
 import { Button } from "@/shared/ui/button";
 export default function GithubPage() {
   return (
-    <div className="flex flex-col justify-center h-screen">
+    <div className="flex flex-col justify-center">
       <div className="flex gap-[30px] items-center mb-[70px]">
         <Link
           href={"/vacancies/1"}
