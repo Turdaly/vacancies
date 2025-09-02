@@ -10,12 +10,11 @@ import {
   validateMobileNumber,
 } from "@/shared/lib/validation";
 import { Button } from "@/shared/ui/button";
-import { Input } from "@/shared/ui/input";
 import Link from "next/link";
 import { useState } from "react";
-import { useGit } from "@/entities/useGit";
+import { FormField } from "../../../shared/ui/form-field";
 
-type RespondFormValues = {
+export type RespondFormValues = {
   userData: {
     fullName: string;
     email: string;
@@ -39,8 +38,8 @@ export function RespondForm({
     github: "",
     gitlub: "",
   });
-  const github = localStorage.getItem("github")
-  const gitlub = localStorage.getItem("gitlub")
+  const github = localStorage.getItem("github");
+  const gitlub = localStorage.getItem("gitlub");
   const beforeSave = (data: RespondFormValues) => {
     if (!github) {
       setGitErrors({
@@ -63,64 +62,43 @@ export function RespondForm({
       onSubmit={handleSubmit(beforeSave)}
       className="flex flex-col gap-[30px]"
     >
-      {gitErrors.github}
-      {gitErrors.gitlub}
       <h2 className="font-montserrat font-medium text-4xl">
         Откликнуться на вакансию
       </h2>
       <div className="flex flex-col gap-[15px]">
-        <Input
-          {...register("userData.fullName", {
-            required: "Обязательная поля",
-            validate: (fullName) =>
-              validateFullName(fullName) || "Неверный формат ФИО",
-          })}
-          className="font-lato !text-xl rounded-2xl border-0 h-[90px] pl-[30px] bg-white"
+        <FormField
+          name="fullName"
+          register={register}
+          errors={errors}
           placeholder="ФИО"
-        />
-        {errors.userData?.fullName?.type === "required" && (
-          <span className="text-red-400">
-            {errors.userData.fullName.message}
-          </span>
-        )}
-        {errors.userData?.fullName?.type === "validate" && (
-          <span className="text-red-400">
-            {errors.userData.fullName.message}
-          </span>
-        )}
-        <Input
-          {...register("userData.email", {
-            required: "Обязательная поля",
-            validate: (email) =>
-              vaildateEmail(email) || "Неверный формат электронной почты",
-          })}
-          type="email"
-          className="font-lato !text-xl rounded-2xl border-0 h-[90px] pl-[30px] bg-white"
-          placeholder="Email"
-        />
-        {errors.userData?.email?.type === "required" && (
-          <span className="text-red-400">{errors.userData.email.message}</span>
-        )}
-        {errors.userData?.email?.type === "validate" && (
-          <span className="text-red-400">{errors.userData.email.message}</span>
-        )}
-        <Input
-          {...register("userData.phoneNumber", {
+          validation={{
             required: "Обязательное поле",
-            validate: (phoneNumber) =>
-              validateMobileNumber(phoneNumber) ||
-              "Неверный формат номер телефона",
-          })}
-          type="tel"
-          placeholder="Телефон"
-          className="font-lato !text-xl rounded-2xl border-0 h-[90px] pl-[30px] bg-white"
+            validate: (value: string) =>
+              validateFullName(value) || "Неверный формат ФИО",
+          }}
         />
-        {errors.userData?.phoneNumber?.type === "validate" && (
-          <p className="text-red-400">{errors.userData.phoneNumber.message}</p>
-        )}
-        {errors.userData?.phoneNumber?.type === "required" && (
-          <p className="text-red-400">{errors.userData.phoneNumber.message}</p>
-        )}
+        <FormField
+          name="email"
+          register={register}
+          errors={errors}
+          placeholder="Email"
+          validation={{
+            required: "Обязательное поле",
+            validate: (value: string) =>
+              vaildateEmail(value) || "Неверный формат электронной почты",
+          }}
+        />
+        <FormField
+          name="phoneNumber"
+          register={register}
+          errors={errors}
+          placeholder="Телефон"
+          validation={{
+            required: "Обязательное поле",
+            validate: (value: string) =>
+              validateMobileNumber(value) || "Неверный формат номер телефона",
+          }}
+        />
 
         <Link
           href={"/profile/github"}

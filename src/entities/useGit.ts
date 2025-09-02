@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Key = "github" | "gitlub";
 export const useGit = (key: Key) => {

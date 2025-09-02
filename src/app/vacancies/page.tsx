@@ -15,7 +15,7 @@ import { useVacancies } from "@/entities/use-vacancies";
 
 export default function VacanciesPage() {
   const router = useRouter();
-  const { vacancies, isPending } = useVacancies();
+  const { vacancies } = useVacancies();
 
   const onClick = (id: number) => {
     router.push(`vacancies/${id}`);
