@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
 import { Montserrat, Lato } from "next/font/google";
 import "./globals.css";
-
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
-})
+});
 
 const lato = Lato({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-lato",
-})
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,7 +27,7 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${lato.variable} h-screen bg-[#EAEFF4] mx-[80px]`}
       >
-        {children}
+        <div className="py-5">{children}</div>
       </body>
     </html>
   );

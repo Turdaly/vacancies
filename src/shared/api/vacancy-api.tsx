@@ -10,21 +10,21 @@ export interface Vacancy {
   workConditions: string[];
 }
 
-export const getVacancies = async (): Promise<Vacancy[] | null> => {
+export const getVacancy = async (id: string): Promise<Vacancy[] | []> => {
   try {
-    const res = await api.get<Vacancy[]>("/vacancies");
-    return res.data ? res.data : null;
+    const res = await api.get(`/vacancies?id=${id}`);
+    return res.data ? res.data : [];
   } catch (err) {
     console.log(err);
-    return null;
+    return [];
   }
 };
-
-export const getVacancy = async (id: string) => {
+export const getVacancies = async ():Promise<Vacancy[] | []> => {
   try {
-    const res = await api.get<Vacancy[]>(`/vacancies?id=${id}`);
-    return res.data ? res.data : null;
+    const res = await api.get(`/vacancies`);
+    return res.data ? res.data : [];
   } catch (err) {
     console.log(err);
+    return [];
   }
 };

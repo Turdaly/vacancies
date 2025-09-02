@@ -1,22 +1,59 @@
 "use client";
 import { ChevronLeft } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import useFormPersist from "react-hook-form-persist";
+
 import Link from "next/link";
+import { useState } from "react";
 import { formatNumber } from "@/shared/lib/format-number";
 import { RespondForm } from "../ui/respond-form";
-import { getVacancy, Vacancy } from "@/shared/api/vacancy-api";
-import { useParams } from "next/navigation";
-export default function VacancyPage() {
-  const [vacancy, setVacancy] = useState<Vacancy | null>(null);
-  const { id } = useParams<{ id: string }>();
-  useEffect(() => {
-    async function fetchVacancy() {
-      const data = await getVacancy(id);
-      if (data) setVacancy(data[0]);
-    }
+import { useVacancy } from "@/entities/use-vacancy";
+type VacancyResponse = {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+};
 
-    fetchVacancy();
-  }, []);
+export default function VacancyPage() {
+  const { vacancy } = useVacancy();
+  const [github] = useState(localStorage.getItem("github"));
+  const [gitlub] = useState(localStorage.getItem("gitlub"));
+  const {
+    watch,
+    setValue,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ userData: VacancyResponse }>({
+    defaultValues: JSON.parse(localStorage.getItem("userData") || "{}"),
+  });
+
+  useFormPersist("userData", {
+    watch,
+    setValue,
+    storage: window.localStorage,
+  });
+
+  const onSave = (data: any) => {
+    if (github && gitlub) {
+      const gth = JSON.parse(github);
+      const gtl = JSON.parse(gitlub);
+      const userData = {
+        ...data,
+        vsc: {
+          github: {
+            ...gth,
+          },
+          gitlub: {
+            ...gtl,
+          },
+        },
+      };
+      console.log(userData);
+      alert('Успешно отправлен')
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center">
       <div className="flex gap-10 items-center mb-11">
@@ -57,7 +94,12 @@ export default function VacancyPage() {
             </div>
           </div>
         </div>
-        <RespondForm />
+        <RespondForm
+          register={register}
+          errors={errors}
+          handleSubmit={handleSubmit}
+          onSave={onSave}
+        />
       </div>
     </div>
   );

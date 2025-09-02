@@ -1,23 +1,31 @@
+"use client";
+
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { Input } from "@/shared/ui/input";
-import { Label } from "@/shared/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/ui/select";
-import { Button } from "@/shared/ui/button";
+import { validateNickname } from "@/shared/lib/validation";
+import { FormEvent, useState } from "react";
+import { GitForm } from "../ui/git-form";
+import { useRouter } from "next/navigation";
+import { useGit } from "@/entities/useGit";
 export default function GithubPage() {
+  const router = useRouter();
+  const {nickname, repoCount, setNickname, setRepoCount} = useGit("github");
+  const vacancyId = localStorage.getItem("vacancyId");
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!nickname) return alert("Напишите nickname");
+    if (!validateNickname(nickname))
+      return alert("Не правильный формат никнейма");
+    if (!repoCount) return alert("Выберите количество репозиториев");
+    const github = { nickname: nickname, repoCount: repoCount };
+    localStorage.setItem("github", JSON.stringify(github));
+    router.push(`/vacancies/${vacancyId}`);
+  };
   return (
     <div className="flex flex-col justify-center">
       <div className="flex gap-[30px] items-center mb-[70px]">
         <Link
-          href={"/vacancies/1"}
+          href={`/vacancies/${vacancyId}`}
           className="bg-primary rounded-full w-15 h-15 flex items-center justify-center"
         >
           <ChevronLeft className="text-white size-10" strokeWidth={1.4} />
@@ -27,47 +35,13 @@ export default function GithubPage() {
           Добавить GitHub
         </h1>
       </div>
-      <div className="mx-[200px]">
-        <div className="grid w-full gap-5 mb-[30px]">
-          <Label className="font-montserrat font-medium text-3xl leading-[130%]">
-            Никнейм
-          </Label>
-          <Input className="font-lato !text-xl rounded-2xl border-0 h-[80px] px-[30px] bg-white" />
-        </div>
-        <div className="grid w-full gap-5">
-          <Label className="font-montserrat font-medium text-3xl leading-[130%]">
-            Количество репозиториев
-          </Label>
-          <Select>
-            <SelectTrigger className="font-lato text-2xl w-full !h-[80px] px-[30px] rounded-2xl bg-white">
-              <SelectValue placeholder="Не выбрано" />
-            </SelectTrigger>
-            <SelectContent className="!w-full rounded-2xl relative">
-              <SelectGroup className="!w-full rounded-2xl  ">
-                <SelectItem
-                  value="apple"
-                  className="!w-full rounded-2xl !text-2xl "
-                >
-                  1-5
-                </SelectItem>
-                <SelectItem
-                  value="banana"
-                  className="!w-full rounded-2xl !text-2xl "
-                >
-                  5-10
-                </SelectItem>
-                <SelectItem
-                  value="blueberry"
-                  className="!w-full rounded-2xl !text-2xl "
-                >
-                  +10
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-        <Button className="rounded-full mx-auto mt-40 px-[30px] py-[22px]">Продолжить</Button>
+      <GitForm
+        nickname={nickname}
+        repoCount={repoCount}
+        setNickname={setNickname}
+        setRepoCount={setRepoCount}
+        onSubmit={onSubmit}
+      />
     </div>
   );
 }

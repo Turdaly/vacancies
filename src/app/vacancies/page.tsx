@@ -10,21 +10,12 @@ import {
 
 import { Button } from "@/shared/ui/button";
 import { useRouter } from "next/navigation";
-import { getVacancies, Vacancy } from "@/shared/api/vacancy-api";
-import { useEffect, useState } from "react";
 import { formatNumber } from "@/shared/lib/format-number";
+import { useVacancies } from "@/entities/use-vacancies";
 
 export default function VacanciesPage() {
   const router = useRouter();
-  const [vacancies, setVacancies] = useState<Vacancy[]>([]);
-  useEffect(() => {
-    async function fetchVacancies() {
-      const data = await getVacancies();
-      console.log(data)
-      if (data) setVacancies(data);
-    }
-    fetchVacancies();
-  }, []);
+  const { vacancies, isPending } = useVacancies();
 
   const onClick = (id: number) => {
     router.push(`vacancies/${id}`);
