@@ -10,7 +10,7 @@ export const useVacancies = () => {
       setVacancies(data)
     }
     fetch();
-  });
+  }, []);
   return {
     vacancies,
   };

@@ -1,14 +1,11 @@
 "use client";
-import { ChevronLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import useFormPersist from "react-hook-form-persist";
 
-import Link from "next/link";
 import { useState } from "react";
-import { formatNumber } from "@/shared/lib/format-number";
-import { RespondForm } from "../ui/respond-form";
+import { RespondForm } from "./ui/respond-form";
 import { useVacancy } from "@/entities/use-vacancy";
-import { InfoJob } from "../ui/info-job";
+import { InfoJob } from "./ui/info-job";
 type VacancyResponse = {
   fullName: string;
   email: string;

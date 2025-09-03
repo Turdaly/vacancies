@@ -1,6 +1,6 @@
 import { Input } from "@/shared/ui/input";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { RespondFormValues } from "../../app/vacancies/ui/respond-form";
+import { RespondFormValues } from "../../app/vacancies/[id]/ui/respond-form";
 
 type FormFieldProps = {
   name: keyof RespondFormValues["userData"];

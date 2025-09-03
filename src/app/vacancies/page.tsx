@@ -25,7 +25,7 @@ export default function VacanciesPage() {
       <h1 className={`font-montserrat text-5xl font-medium`}>Наши вакансии</h1>
 
       <div className="grid grid-cols-3 justify-center gap-7">
-        {vacancies.map((vacancy) => (
+        {vacancies?.map((vacancy) => (
           <Card className="max-w-sm px-1 py-7 w-[566px]" key={vacancy.id}>
             <CardHeader>
               <CardDescription className="font-lato font-normal text-2xl">

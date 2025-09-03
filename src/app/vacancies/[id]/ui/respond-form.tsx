@@ -12,7 +12,7 @@ import {
 import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { useState } from "react";
-import { FormField } from "../../../shared/ui/form-field";
+import { FormField } from "../../../../shared/ui/form-field";
 
 export type RespondFormValues = {
   userData: {
